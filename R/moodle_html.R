@@ -60,9 +60,18 @@ moodle_html_from_html <- function(file, dir = NULL) {
   }
 
   if (is.null(dir)) dir <- dirname(file)
+
   output <- with_ext(file, "html", dir)
-  if (tools::file_path_as_absolute(file) == tools::file_path_as_absolute(output))
-    output <- paste0(tools::file_path_sans_ext(output), "-out.html")
+
+  # Input file may be identical to the output target...
+  if (file.exists(output)) {
+    in_file <- tools::file_path_as_absolute(file)
+    out_file <- tools::file_path_as_absolute(output)
+    if (in_file == out_file) {
+      output <- paste0(tools::file_path_sans_ext(output), "-out.html")
+    }
+  }
+
   xml2::write_html(article, output)
 
   invisible(strsplit(as.character(article), "\n")[[1]])

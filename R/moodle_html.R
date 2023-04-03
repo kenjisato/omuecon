@@ -4,7 +4,7 @@
 #' @param file Path to the source HTML/Markdown file. s
 #' @param dir Path to the output directory. If NULL, saved to the same directory
 #'   as the source data.
-#' @param clip bool. If TRUE (default), the result will be copied to
+#' @param clip logical. If TRUE (default), the result will be copied to
 #'   the clipboard.
 #' @param ... Paramters passed to [moodle_html_from_md()].
 #'
@@ -19,8 +19,11 @@ moodle_html <- function(file, dir = NULL, clip = TRUE, ...) {
         rmd = moodle_html_from_md(file, dir),
         stop(paste0("Extension ", ext, " is not supported.")))
 
-  clipr::write_clip(res, breaks = "\n")
-  message("HTML code has been copied to the clipboard. Now you can paste it to Moodle.")
+  if (clip) {
+    clipr::write_clip(res, breaks = "\n")
+    message("HTML code has been copied to the clipboard. Now you can paste it to Moodle.")
+  }
+
   invisible(res)
 }
 

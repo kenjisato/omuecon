@@ -1,0 +1,148 @@
+body, td {
+  font-family: sans-serif;
+  background-color: white;
+  color: black;
+}
+
+
+body {
+  max-width: 660px;
+  margin: auto;
+  padding: 1em;
+  line-height: 160%;
+}
+
+tt, code, pre {
+   font-family: 'DejaVu Sans Mono', 'Droid Sans Mono', 'Lucida Console', Consolas, Monaco, monospace;
+}
+
+h1 {
+   text-align: center;
+   font-size:2.2em;
+   line-height: 170%;
+   padding: 1em auto;
+   margin-bottom: 1em;
+}
+
+h2 {
+   font-size:1.8em;
+   line-height: 160%;
+   margin-top: 1.3em;
+   margin-bottom: 1em;
+
+   border-left: solid 15px #a25678;
+   padding-top: 0.3em;
+   padding-bottom: 0.3em;
+   padding-left: 15px;
+   background-color: #eee;
+}
+
+h3 {
+   font-size:1.4em;
+   padding-bottom: 0.2em;
+   padding-left: 15px;
+   margin-top: 1.5em;
+   border-bottom: solid 2px #a25678;
+}
+
+h4 {
+   font-size:1.0em;
+}
+
+h5 {
+   font-size:0.9em;
+}
+
+h6 {
+   font-size:0.8em;
+}
+
+a:visited {
+   color: rgb(50%, 0%, 50%);
+}
+
+pre, img {
+  max-width: 100%;
+}
+pre {
+  overflow-x: auto;
+}
+pre code {
+   display: block; padding: 0.5em;
+}
+
+code {
+  font-size: 92%;
+  border: 1px solid #ccc;
+}
+
+code[class] {
+  background-color: #F8F8F8;
+}
+
+table, td, th {
+  border: none;
+}
+
+blockquote {
+   color:#666666;
+   margin:0;
+   padding-left: 1em;
+   border-left: 0.5em #EEE solid;
+}
+
+hr {
+   height: 0px;
+   border-bottom: none;
+   border-top-width: thin;
+   border-top-style: dotted;
+   border-top-color: #999999;
+}
+
+.math {
+  text-align: center;
+}
+
+
+
+.schedule  {
+  border-collapse: collapse;
+  border-spacing: 0;
+  margin: 18px auto 30px;
+}
+.schedule td, .schedule th {
+  border-color: black;
+  border-style: solid;
+  border-width: 1px;
+  font-family: Arial, sans-serif;
+  font-size: 14px;
+  overflow: hidden;
+  padding: 10px 5px;
+  word-break: normal;
+}
+
+.schedule tr td:nth-child(1) {
+  width: 80px;
+  text-align: center;
+  vertical-align: middle;
+  border-right: none;
+  font-weight: bold;
+}
+.schedule tr td:nth-child(2) {
+  width: 45px;
+  text-align: center;
+  vertical-align: middle;
+  border-left: none;
+  font-weight: bold;
+}
+.schedule tr td:nth-child(3) {
+  width: 210px;
+  font-weight: bold;
+}
+.schedule tr td:nth-child(4) {
+  width: 280px;
+}
+
+
+* > :first-child { margin-top: 0 !important; }
+

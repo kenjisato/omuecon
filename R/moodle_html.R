@@ -88,18 +88,26 @@ moodle_html_from_html <- function(file, dir = NULL) {
 #' @param dir Path to the output directory.
 #' @param stylesheet Path to a CSS file.
 #' @param template Path to an HTML template.
+#' @param debug logical. If set to True, intermediate md file is kept.
 #'
 #' @return character vector representing the resulting document (HTML fragment).
 moodle_html_from_md <- function(file, dir = NULL, stylesheet = NULL,
-                                template = NULL) {
-
-  knitr::opts_chunk$set(eval = TRUE, echo = FALSE)
+                                template = NULL, debug = FALSE) {
 
   tdir <- file.path(tempdir(), "moodle_html_from_md")
   dir.create(tdir, showWarnings = FALSE)
-  intermediate_md <- tempfile(tmpdir = dirname(file), fileext = ".md")
-
+  intermediate_md <- tempfile(tmpdir = tdir, fileext = ".md")
   intermediate_html <- with_ext(file, "html", tdir)
+
+  oopts_knit <- knitr::opts_knit$get()
+  on.exit(knitr::opts_knit$set(oopts_knit))
+
+  oopts_chunk <- knitr::opts_chunk$get()
+  on.exit(knitr::opts_chunk$set(oopts_chunk), add = TRUE)
+
+  knitr::opts_knit$set(base.dir = tdir)
+  knitr::opts_chunk$set(eval = TRUE, echo = FALSE, fig.path = "figures/")
+
   knitr::knit(file, intermediate_md, quiet = TRUE)
 
   # Render markdown
@@ -118,14 +126,14 @@ moodle_html_from_md <- function(file, dir = NULL, stylesheet = NULL,
   writeLines(out, intermediate_html)
 
   # Clean Up
-  file.remove(intermediate_md)
+  if (!debug) file.remove(intermediate_md)
 
   # Style Inliner
   if (is.null(dir)) dir <- dirname(file)
   ret <- moodle_html_from_html(intermediate_html, dir)
 
   # Clean Up
-  unlink(tdir, recursive = TRUE)
+  if (!debug) unlink(tdir, recursive = TRUE)
 
   invisible(ret)
 }

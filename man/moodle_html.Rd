@@ -12,7 +12,7 @@ moodle_html(file, dir = NULL, clip = TRUE, ...)
 \item{dir}{Path to the output directory. If NULL, saved to the same directory
 as the source data.}
 
-\item{clip}{bool. If TRUE (default), the result will be copied to
+\item{clip}{logical. If TRUE (default), the result will be copied to
 the clipboard.}
 
 \item{...}{Paramters passed to \code{\link[=moodle_html_from_md]{moodle_html_from_md()}}.}

@@ -15,8 +15,8 @@ moodle_html <- function(file, dir = NULL, clip = TRUE, ...) {
   ext <- tolower(tools::file_ext(file))
   res <- switch(ext,
         html = moodle_html_from_html(file, dir),
-        md = moodle_html_from_md(file, dir),
-        rmd = moodle_html_from_md(file, dir),
+        md = moodle_html_from_md(file, dir, ...),
+        rmd = moodle_html_from_md(file, dir, ...),
         stop(paste0("Extension ", ext, " is not supported.")))
 
   if (clip) {

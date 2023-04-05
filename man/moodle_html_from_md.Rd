@@ -5,7 +5,13 @@
 \title{Convert a Markdown file into an HTML block to be copied and
 pasted for Moodle.}
 \usage{
-moodle_html_from_md(file, dir = NULL, stylesheet = NULL, template = NULL)
+moodle_html_from_md(
+  file,
+  dir = NULL,
+  stylesheet = NULL,
+  template = NULL,
+  debug = FALSE
+)
 }
 \arguments{
 \item{file}{File path to a markdown document.}
@@ -15,6 +21,8 @@ moodle_html_from_md(file, dir = NULL, stylesheet = NULL, template = NULL)
 \item{stylesheet}{Path to a CSS file.}
 
 \item{template}{Path to an HTML template.}
+
+\item{debug}{logical. If set to True, intermediate md file is kept.}
 }
 \value{
 character vector representing the resulting document (HTML fragment).

@@ -4,10 +4,11 @@
 \alias{moodle_html}
 \title{Create HTML block with inline CSS.}
 \usage{
-moodle_html(file, dir = NULL, clip = TRUE, ...)
+moodle_html(file = NULL, dir = NULL, clip = TRUE, ...)
 }
 \arguments{
-\item{file}{Path to the source HTML/Markdown file. s}
+\item{file}{Path to the source HTML/Markdown file. If unspecified,
+\code{\link[=file.choose]{file.choose()}} helps you to choose one.}
 
 \item{dir}{Path to the output directory. If NULL, saved to the same directory
 as the source data.}

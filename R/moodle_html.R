@@ -1,7 +1,8 @@
 
 #' Create HTML block with inline CSS.
 #'
-#' @param file Path to the source HTML/Markdown file. s
+#' @param file Path to the source HTML/Markdown file. If unspecified,
+#'   [file.choose()] helps you to choose one.
 #' @param dir Path to the output directory. If NULL, saved to the same directory
 #'   as the source data.
 #' @param clip logical. If TRUE (default), the result will be copied to
@@ -11,7 +12,12 @@
 #' @return character vector representing the resulting document (HTML fragment).
 #' @export
 #'
-moodle_html <- function(file, dir = NULL, clip = TRUE, ...) {
+moodle_html <- function(file = NULL, dir = NULL, clip = TRUE, ...) {
+
+  if (is.null(file)) {
+    file <- file.choose()
+  }
+
   ext <- tolower(tools::file_ext(file))
   res <- switch(ext,
         html = moodle_html_from_html(file, dir),
@@ -75,7 +81,8 @@ moodle_html_from_html <- function(file, dir = NULL) {
     }
   }
 
-  xml2::write_html(article, output)
+  xml2::write_html(article, output,
+                   options = c("format_whitespace", "as_html"))
 
   invisible(strsplit(as.character(article), "\n")[[1]])
 }
@@ -110,9 +117,12 @@ moodle_html_from_md <- function(file, dir = NULL, stylesheet = NULL,
 
   knitr::knit(file, intermediate_md, quiet = TRUE)
 
-  # Render markdown
+  # Resolve CSS variables for :root.
   if (is.null(stylesheet))
     stylesheet <- system.file("css/style.css", package = PKG)
+  css_str <- css_resolve(stylesheet)
+  stylesheet <- tempfile(tmpdir = tdir, fileext = ".css")
+  cat(css_str, file = stylesheet)
 
   if (is.null(template)) {
     template <- system.file("xml/template.html", package = PKG)
@@ -125,15 +135,16 @@ moodle_html_from_md <- function(file, dir = NULL, stylesheet = NULL,
   out <- gsub("<p>$$", "<p class=\"math\">$$", out, fixed = TRUE)
   writeLines(out, intermediate_html)
 
-  # Clean Up
-  if (!debug) file.remove(intermediate_md)
-
   # Style Inliner
   if (is.null(dir)) dir <- dirname(file)
   ret <- moodle_html_from_html(intermediate_html, dir)
 
   # Clean Up
-  if (!debug) unlink(tdir, recursive = TRUE)
+  if (!debug) {
+    unlink(tdir, recursive = TRUE)
+  } else {
+    message("Location for the intermediate files: \n", tdir)
+  }
 
   invisible(ret)
 }

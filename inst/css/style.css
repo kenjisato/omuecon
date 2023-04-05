@@ -1,12 +1,15 @@
-body, td {
-  font-family: sans-serif;
-  background-color: white;
-  color: black;
+/* Currently, omuecon only supports variables for :root */
+:root {
+  --corp-color: #a25678;
+  --base-font-color: black;
+  --article-width: 660px;
+  --h2-bg-color: #eee;
 }
 
-
 body {
-  max-width: 660px;
+  max-width: var(--article-width);
+  font-family: sans-serif;
+  color: var(--base-font-color);
   margin: auto;
   padding: 1em;
   line-height: 160%;
@@ -29,12 +32,11 @@ h2 {
    line-height: 160%;
    margin-top: 1.3em;
    margin-bottom: 1em;
-
-   border-left: solid 15px #a25678;
+   border-left: solid 15px var(--corp-color);
    padding-top: 0.3em;
    padding-bottom: 0.3em;
    padding-left: 15px;
-   background-color: #eee;
+   background-color: var(--h2-bg-color);
 }
 
 h3 {
@@ -42,7 +44,7 @@ h3 {
    padding-bottom: 0.2em;
    padding-left: 15px;
    margin-top: 1.5em;
-   border-bottom: solid 2px #a25678;
+   border-bottom: solid 2px var(--corp-color);
 }
 
 h4 {
@@ -80,8 +82,13 @@ code[class] {
   background-color: #F8F8F8;
 }
 
-table, td, th {
-  border: none;
+table {
+    border-collapse: collapse;
+}
+
+th, td {
+    border: solid 1px;
+    padding: 10px;
 }
 
 blockquote {
@@ -102,8 +109,6 @@ hr {
 .math {
   text-align: center;
 }
-
-
 
 .schedule  {
   border-collapse: collapse;

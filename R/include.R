@@ -29,7 +29,8 @@ includeText <- function(path, tmpfile = NULL,
 
 includeSchedule <- function(df = NULL, path = NULL, template = NULL, ...) {
 
-  stopifnot("Specify either df or path, not both." = xor(is.null(df), is.null(path)))
+  stopifnot("Specify either df or path, not both." =
+              xor(is.null(df), is.null(path)))
 
   if (!is.null(path)) df <- readxl::read_excel(path)
 

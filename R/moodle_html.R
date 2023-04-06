@@ -117,12 +117,15 @@ moodle_html_from_md <- function(file, dir = NULL, stylesheet = NULL,
 
   knitr::knit(file, intermediate_md, quiet = TRUE)
 
-  # Resolve CSS variables for :root.
+  # Merge stylesheets and resolve CSS variables for :root.
   if (is.null(stylesheet))
-    stylesheet <- system.file("css/style.css", package = PKG)
-  css_str <- css_resolve(stylesheet)
+    stylesheet <- css_find("style.css")
+  else
+    stylesheet <- css_find(stylesheet)
+
+  css_str <- sapply(stylesheet, css_resolve)
   stylesheet <- tempfile(tmpdir = tdir, fileext = ".css")
-  cat(css_str, file = stylesheet)
+  cat(css_str, file = stylesheet, sep = "\n")
 
   if (is.null(template)) {
     template <- system.file("xml/template.html", package = PKG)

@@ -15,7 +15,14 @@ css_resolve <- function(css) {
       pattern = stringr::regex(":root\\s*\\{([^\\}]*)\\}", dotall = TRUE),
       group = 1
     ) |>
-    str_remove(";$") |>
+    str_remove(";$")
+
+  if (is.na(variables)) {
+    return(css)
+  }
+
+  variables <-
+    variables |>
     str_split_1(";") |>
     str_split(":", simplify = TRUE)
 
@@ -27,6 +34,16 @@ css_resolve <- function(css) {
 }
 
 
+css_find <- function(stylesheets) {
+  user_file <- file.exists(stylesheets)
+
+  if (any(!user_file)) {
+    system_file <- system.file("css", stylesheets[!user_file],
+                               package = PKG, mustWork = TRUE)
+    stylesheets[!user_file] <- system_file
+  }
+  stylesheets
+}
 
 
 

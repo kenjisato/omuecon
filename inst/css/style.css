@@ -13,6 +13,7 @@ body {
   margin: auto;
   padding: 0 1em;
   line-height: 160%;
+  margin-bottom: 100px;
 }
 
 h1 {
@@ -48,6 +49,9 @@ h4 {
    padding-left: 8px;
    padding-bottom: 0.2em;
    border-bottom: solid 2px #ddd;
+   margin-top: 20px;
+   margin-bottom: 15px;
+   margin-left: 10px;
    width: 40%;
 }
 
@@ -79,19 +83,20 @@ tt, code, pre {
 }
 
 pre {
+  font-size: 13px;
   overflow-x: auto;
-  margin: 10px;
+  margin: 15px 10px;
+  padding: 5px;
+  color: #333;
+  word-break: break-all;
+  word-wrap: break-word;
+  background-color: #F5F5F5;
+  border: 1px solid #ccc;
+  border-radius: 4px;
 }
 pre code {
    display: block;
    padding: 0 8px;
-}
-code {
-  font-size: 92%;
-}
-
-code[class] {
-  background-color: #F8F8F8;
 }
 
 /* table */

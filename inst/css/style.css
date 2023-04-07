@@ -73,6 +73,7 @@ pre, img {
    max-width: 100%;
 }
 img {
+   display: block;
    margin: 10px auto;
 }
 

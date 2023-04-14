@@ -131,7 +131,8 @@ moodle_html_from_md <- function(file, dir = NULL, stylesheet = NULL,
     template <- system.file("xml", "template.html", package = .packageName)
   }
 
-  out <- markdown::mark(readLines(intermediate_md), format = "html",
+  out <- markdown::mark(file = intermediate_md,
+                        output = NULL, format = "html",
                         template = template, meta = list(css = stylesheet))
 
   out <- gsub("<p>$$", "<p class=\"math\">$$", out, fixed = TRUE)

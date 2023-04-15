@@ -10,7 +10,8 @@ moodle_html_from_md(
   dir = NULL,
   stylesheet = NULL,
   template = NULL,
-  debug = FALSE
+  debug = FALSE,
+  ...
 )
 }
 \arguments{
@@ -23,6 +24,8 @@ moodle_html_from_md(
 \item{template}{Path to an HTML template.}
 
 \item{debug}{logical. If set to True, intermediate md file is kept.}
+
+\item{...}{parameters passed on to \code{\link[=moodle_html_from_html]{moodle_html_from_html()}}}
 }
 \value{
 character vector representing the resulting document (HTML fragment).

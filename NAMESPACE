@@ -2,6 +2,9 @@
 
 export(includeText)
 export(moodle_html)
+export(moodle_label)
+export(moodle_page)
+importFrom(dplyr,"%>%")
 importFrom(stringr,str_extract)
 importFrom(stringr,str_glue)
 importFrom(stringr,str_remove)

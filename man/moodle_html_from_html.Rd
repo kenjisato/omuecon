@@ -5,15 +5,19 @@
 \title{Convert a standalone HTML file into an HTML block to be copied and
 pasted for Moodle.}
 \usage{
-moodle_html_from_html(file, dir = NULL)
+moodle_html_from_html(file, dir = NULL, tag = "article", id = NULL)
 }
 \arguments{
-\item{file}{Path to a standalone HTML file.}
+\item{file}{character. Path to a standalone HTML file.}
 
-\item{dir}{Path to the directory to save the resulting HTML file.}
+\item{dir}{character. Path to the directory to save the resulting HTML file.}
+
+\item{tag}{character. Outer-most tag for the resulting HTML snippet.}
+
+\item{id}{character. id attribute for the outer-most tag.}
 }
 \value{
-Invisibly returns a character vector.
+character. HTML block.
 }
 \description{
 Convert a standalone HTML file into an HTML block to be copied and

@@ -2,6 +2,7 @@
 "_PACKAGE"
 
 ## usethis namespace: start
+#' @importFrom dplyr %>%
 #' @importFrom stringr str_extract
 #' @importFrom stringr str_glue
 #' @importFrom stringr str_remove

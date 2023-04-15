@@ -10,11 +10,11 @@ css_resolve <- function(css) {
   }
 
   variables <-
-    css |>
+    css %>%
     str_extract(
       pattern = stringr::regex(":root\\s*\\{([^\\}]*)\\}", dotall = TRUE),
       group = 1
-    ) |>
+    ) %>%
     str_remove(";$")
 
   if (is.na(variables)) {
@@ -22,8 +22,8 @@ css_resolve <- function(css) {
   }
 
   variables <-
-    variables |>
-    str_split_1(";") |>
+    variables %>%
+    str_split_1(";") %>%
     str_split(":", simplify = TRUE)
 
   keys <- str_squish(variables[, 1])
@@ -39,7 +39,7 @@ css_find <- function(stylesheets) {
 
   if (any(!user_file)) {
     system_file <- system.file("css", stylesheets[!user_file],
-                               package = PKG, mustWork = TRUE)
+                               package = .packageName, mustWork = TRUE)
     stylesheets[!user_file] <- system_file
   }
   stylesheets

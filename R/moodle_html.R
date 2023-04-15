@@ -1,4 +1,36 @@
 
+#' Wrappers for [moodle_html()]
+#'
+#' Convert markdown file to HTML fragment ready to be copy-pasted
+#' for Moodle page or label, etc.
+#'
+#' The output of [moodle_page()] is meant for Moodle pages. It
+#' creates `article` tag block that makes the main part of a single
+#' page. [moodle_label()] creates a more smaller part of the entire
+#' Moodle sites, contained in a `div` block. It is used typically
+#' for labels, in which more tighter style may be appropriate.
+#'
+#' @param file character. Path to the markdown file.
+#' @param dir character. Path to the output dir.
+#' @param ... Arguments passed on to [moodle_html()]
+#'
+#' @return character vector representing the resulting document (HTML fragment).
+#' @export
+#'
+moodle_page <-function(file = NULL, dir = NULL, ...) {
+  stylesheet <- "style.css"
+  moodle_html(file, dir, stylesheet = stylesheet, tag = "article", ...)
+}
+
+
+#' @describeIn moodle_page Wrapper for making snippets for Moodle labels.
+#' @export
+moodle_label <-function(file = NULL, dir = NULL, ...) {
+  stylesheet <- "label.css"
+  moodle_html(file, dir, stylesheet = stylesheet, tag = "div", ...)
+}
+
+
 #' Create HTML block with inline CSS.
 #'
 #' @param file Path to the source HTML/Markdown file. If unspecified,
@@ -20,10 +52,11 @@ moodle_html <- function(file = NULL, dir = NULL, clip = TRUE, ...) {
 
   ext <- tolower(tools::file_ext(file))
   res <- switch(ext,
-        html = moodle_html_from_html(file, dir),
-        md = moodle_html_from_md(file, dir, ...),
-        rmd = moodle_html_from_md(file, dir, ...),
-        stop(paste0("Extension ", ext, " is not supported.")))
+          html = moodle_html_from_html(file, dir),
+          md = moodle_html_from_md(file, dir, ...),
+          rmd = moodle_html_from_md(file, dir, ...),
+          stop(paste0("Extension ", ext, " is not supported."))
+          )
 
   if (clip) {
     clipr::write_clip(res, breaks = "\n")
@@ -36,16 +69,19 @@ moodle_html <- function(file = NULL, dir = NULL, clip = TRUE, ...) {
 #' Convert a standalone HTML file into an HTML block to be copied and
 #' pasted for Moodle.
 #'
-#' @param file Path to a standalone HTML file.
-#' @param dir Path to the directory to save the resulting HTML file.
+#' @param file character. Path to a standalone HTML file.
+#' @param dir character. Path to the directory to save the resulting HTML file.
+#' @param tag character. Outer-most tag for the resulting HTML snippet.
+#' @param id character. id attribute for the outer-most tag.
 #'
-#' @return Invisibly returns a character vector.
-moodle_html_from_html <- function(file, dir = NULL) {
+#' @return character. HTML block.
+moodle_html_from_html <- function(
+    file, dir = NULL, tag = "article", id = NULL) {
   orig_html <- paste(readLines(file), collapse = "\n")
 
   inlined_html <-
-    orig_html |>
-    juicyjuice::css_inline() |>
+    orig_html %>%
+    juicyjuice::css_inline() %>%
     rvest::read_html()
 
   body <- rvest::html_element(inlined_html, "body")
@@ -58,14 +94,15 @@ moodle_html_from_html <- function(file, dir = NULL) {
   body_attr <- rvest::html_attrs(body)
   body_children <- rvest::html_children(body)
 
-  article <-
-    rvest::read_html("<article></article>") |>
-    rvest::html_element("article")
+  container_tag <-
+    rvest::read_html(str_glue("<{tag}></{tag}>")) %>%
+    rvest::html_element(tag)
 
-  xml2::xml_attr(article, "style") <- body_attr
+  if (!is.null(id)) xml2::xml_attr(container_tag, "id") <- id
+  xml2::xml_attr(container_tag, "style") <- body_attr
 
   for (child in body_children) {
-    xml2::xml_add_child(article, child)
+    xml2::xml_add_child(container_tag, child)
   }
 
   if (is.null(dir)) dir <- dirname(file)
@@ -81,10 +118,10 @@ moodle_html_from_html <- function(file, dir = NULL) {
     }
   }
 
-  xml2::write_html(article, output,
+  xml2::write_html(container_tag, output,
                    options = c("format_whitespace", "as_html"))
 
-  invisible(strsplit(as.character(article), "\n")[[1]])
+  invisible(strsplit(as.character(container_tag), "\n")[[1]])
 }
 
 
@@ -96,10 +133,11 @@ moodle_html_from_html <- function(file, dir = NULL) {
 #' @param stylesheet Path to a CSS file.
 #' @param template Path to an HTML template.
 #' @param debug logical. If set to True, intermediate md file is kept.
+#' @param ... parameters passed on to [moodle_html_from_html()]
 #'
 #' @return character vector representing the resulting document (HTML fragment).
 moodle_html_from_md <- function(file, dir = NULL, stylesheet = NULL,
-                                template = NULL, debug = FALSE) {
+                                template = NULL, debug = FALSE, ...) {
 
   tdir <- file.path(tempdir(), "moodle_html_from_md")
   dir.create(tdir, showWarnings = FALSE)
@@ -140,7 +178,7 @@ moodle_html_from_md <- function(file, dir = NULL, stylesheet = NULL,
 
   # Style Inliner
   if (is.null(dir)) dir <- dirname(file)
-  ret <- moodle_html_from_html(intermediate_html, dir)
+  ret <- moodle_html_from_html(intermediate_html, dir, ...)
 
   # Clean Up
   if (!debug) {

@@ -1,6 +1,6 @@
 Package: omuecon
 Title: Helper Functions for Moodle
-Version: 0.0.3
+Version: 0.0.4
 Authors@R: 
     person("Kenji", "Sato", , "mail@kenjisato.jp", role = c("aut", "cre"))
 Description: A collection of functions to work with Moodle LMS. 

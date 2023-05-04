@@ -105,6 +105,13 @@ pre code {
 table {
    border-collapse: collapse;
    margin: 0.8em auto;
+   padding-left: 15px;
+   padding-right: 15px;
+   font-size: 0.9em;
+}
+
+thead {
+  background-color: #FFCCCC;
 }
 
 th, td {
@@ -117,6 +124,7 @@ th, td {
 ul, ol {
   margin-top: 15px;
   margin-bottom: 15px;
+  margin-left: 10px;
 }
 
 li {
@@ -156,3 +164,23 @@ hr {
 }
 
 * > :first-child { margin-top: 0 !important; }
+
+
+
+.includeYT {
+  margin: 20px auto;
+  padding-top: 56.25%;
+  width: 95%;
+  position: relative;
+  background-color: #fefefe;
+  box-shadow: 1px 1px 2px #bbbbbb;
+}
+
+.includeYT iframe {
+    width: 100%;
+    height: 100%;
+    position: absolute;
+    top: 0px;
+    left: 0px;
+}
+

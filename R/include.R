@@ -75,4 +75,96 @@ includeSchedule <- function(df = NULL, path = NULL, template = NULL, ...) {
 }
 
 
+#' Include Summary/Details block.
+#'
+#' @param summary character. Text to show, typically, question string.
+#' @param detail character. Texts to hide, typically, answer string.
+#' @param summary_label character. Label for the open block.
+#' @param detail_label character. Label for the hidden block.
+#' @param ... character. Concatenated with the detail argument.
+#'
+#' @return HTML5 summary/details block is inserted.
+#' @export
+includeQuestion <- function(summary, detail,
+                            summary_label = "Quiz",
+                            detail_label = "Answer", ...) {
+  detail <- paste0("<p>", c(detail, ...), "</p>")
+  result <- c(
+    "<details>",
+    paste0("<summary><span class = 'summary-label'>", summary_label, "</span>"),
+    "<p>",
+    summary,
+    "</p></summary>",
+    "<section>",
+    paste0("<p><strong>", detail_label, "</strong><br>"),
+    detail,
+    "</section>",
+    "</details>"
+  )
+  writeLines(result)
+}
+
+#' Include Audio media.
+#'
+#' @param url character. URL of the audio. The media must not be gated.
+#'
+#' @return HTML5 audio tag is inserted into the document.
+#' @export
+#'
+includeAudio <- function(url) {
+  writeLines(
+    paste0("<audio controls src=\"",
+           url,
+           "\"></audio>")
+  )
+}
+
+#' Include graphic media.
+#'
+#' This function is a wrapper for [knitr::include_graphics()].
+#' Since omuecon creates intermediate files in a temporary directory,
+#' calling [knitr::include_graphics()] does not include local images.
+#' This function copies the media into the temporary directory and
+#' calls [knitr::include_graphics()].
+#'
+#' @param src character. Path to the image.
+#' @param ... Parameters passed to [knitr::include_graphics()], other than path.
+#'
+#' @return The result of [knitr::include_graphics()]
+#' @export
+#'
+includeGraphics <- function(src, ...) {
+  file.copy(src, file.path(tempdir(), "moodle_html_from_md"))
+  knitr::include_graphics(path = src, ...)
+}
+
+
+#' Include YouTube video.
+#'
+#' @param url character. URL of the YouTube video.
+#' @param .class character. The resulting iframe tag is surrounded by div block.
+#'   You can specify its class attribute to modify its styling.
+#'
+#' @return An embed code of a YouTube video is inserted.
+#' @export
+#'
+includeYT <- function(url, .class = 'includeYT') {
+  id <- sub("https://www.youtube.com/watch?v=", "", url, fixed = TRUE)
+  id <- sub("https://youtu.be/", "", id, fixed = TRUE)
+
+  div <- paste0('<div class = "', .class, '">')
+  iframe <- paste0(
+    '<iframe width="560" height="315" src="https://www.youtube.com/embed/',
+    id,
+    '" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" allowfullscreen></iframe>'
+  )
+
+  writeLines(c(
+    div,
+    iframe,
+    '</div>'
+  ))
+}
+
+
 

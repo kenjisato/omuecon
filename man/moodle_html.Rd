@@ -16,7 +16,7 @@ as the source data.}
 \item{clip}{logical. If TRUE (default), the result will be copied to
 the clipboard.}
 
-\item{...}{Paramters passed to \code{\link[=moodle_html_from_md]{moodle_html_from_md()}}.}
+\item{...}{Paramters passed to \code{\link[=moodle_html_from_html]{moodle_html_from_html()}} and \code{\link[=moodle_html_from_md]{moodle_html_from_md()}}.}
 }
 \value{
 character vector representing the resulting document (HTML fragment).

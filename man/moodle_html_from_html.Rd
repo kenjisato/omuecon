@@ -5,7 +5,13 @@
 \title{Convert a standalone HTML file into an HTML block to be copied and
 pasted for Moodle.}
 \usage{
-moodle_html_from_html(file, dir = NULL, tag = "article", id = NULL)
+moodle_html_from_html(
+  file,
+  dir = NULL,
+  tag = "article",
+  id = NULL,
+  keep_script = FALSE
+)
 }
 \arguments{
 \item{file}{character. Path to a standalone HTML file.}
@@ -15,6 +21,9 @@ moodle_html_from_html(file, dir = NULL, tag = "article", id = NULL)
 \item{tag}{character. Outer-most tag for the resulting HTML snippet.}
 
 \item{id}{character. id attribute for the outer-most tag.}
+
+\item{keep_script}{logical. If TRUE, do not remove script tags,
+convenient when drafting a document.}
 }
 \value{
 character. HTML block.

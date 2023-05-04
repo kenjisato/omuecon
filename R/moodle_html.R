@@ -39,7 +39,7 @@ moodle_label <-function(file = NULL, dir = NULL, ...) {
 #'   as the source data.
 #' @param clip logical. If TRUE (default), the result will be copied to
 #'   the clipboard.
-#' @param ... Paramters passed to [moodle_html_from_md()].
+#' @param ... Paramters passed to [moodle_html_from_html()] and [moodle_html_from_md()].
 #'
 #' @return character vector representing the resulting document (HTML fragment).
 #' @export
@@ -52,7 +52,7 @@ moodle_html <- function(file = NULL, dir = NULL, clip = TRUE, ...) {
 
   ext <- tolower(tools::file_ext(file))
   res <- switch(ext,
-          html = moodle_html_from_html(file, dir),
+          html = moodle_html_from_html(file, dir, ...),
           md = moodle_html_from_md(file, dir, ...),
           rmd = moodle_html_from_md(file, dir, ...),
           stop(paste0("Extension ", ext, " is not supported."))
@@ -73,10 +73,12 @@ moodle_html <- function(file = NULL, dir = NULL, clip = TRUE, ...) {
 #' @param dir character. Path to the directory to save the resulting HTML file.
 #' @param tag character. Outer-most tag for the resulting HTML snippet.
 #' @param id character. id attribute for the outer-most tag.
+#' @param keep_script logical. If TRUE, do not remove script tags,
+#'   convenient when drafting a document.
 #'
 #' @return character. HTML block.
 moodle_html_from_html <- function(
-    file, dir = NULL, tag = "article", id = NULL) {
+    file, dir = NULL, tag = "article", id = NULL, keep_script = FALSE) {
   orig_html <- paste(readLines(file), collapse = "\n")
 
   inlined_html <-
@@ -86,9 +88,11 @@ moodle_html_from_html <- function(
 
   body <- rvest::html_element(inlined_html, "body")
 
-  scripts <- rvest::html_elements(body, "script")
-  for (script in scripts) {
-    xml2::xml_remove(script)
+  if (!keep_script) {
+    scripts <- rvest::html_elements(body, "script")
+    for (script in scripts) {
+      xml2::xml_remove(script)
+    }
   }
 
   body_attr <- rvest::html_attrs(body)

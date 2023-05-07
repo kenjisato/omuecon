@@ -7,10 +7,10 @@ pasted for Moodle.}
 \usage{
 moodle_html_from_html(
   file,
-  dir = NULL,
+  dir = dirname(file),
   tag = "article",
   id = NULL,
-  keep_script = FALSE
+  full_html = FALSE
 )
 }
 \arguments{
@@ -22,8 +22,9 @@ moodle_html_from_html(
 
 \item{id}{character. id attribute for the outer-most tag.}
 
-\item{keep_script}{logical. If TRUE, do not remove script tags,
-convenient when drafting a document.}
+\item{full_html}{logical. If TRUE, produce complete html output,
+convenient when drafting a document. When this option is enabled, tag and
+id options are silently ignored.}
 }
 \value{
 character. HTML block.

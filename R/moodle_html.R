@@ -17,7 +17,7 @@
 #' @return character vector representing the resulting document (HTML fragment).
 #' @export
 #'
-moodle_page <-function(file = NULL, dir = NULL, ...) {
+moodle_page <-function(file = NULL, dir = dirname(file), ...) {
   stylesheet <- "style.css"
   moodle_html(file, dir, stylesheet = stylesheet, tag = "article", ...)
 }
@@ -25,7 +25,7 @@ moodle_page <-function(file = NULL, dir = NULL, ...) {
 
 #' @describeIn moodle_page Wrapper for making snippets for Moodle labels.
 #' @export
-moodle_label <-function(file = NULL, dir = NULL, ...) {
+moodle_label <-function(file = NULL, dir = dirname(file), ...) {
   stylesheet <- "label.css"
   moodle_html(file, dir, stylesheet = stylesheet, tag = "div", ...)
 }
@@ -38,13 +38,13 @@ moodle_label <-function(file = NULL, dir = NULL, ...) {
 #' @param dir Path to the output directory. If NULL, saved to the same directory
 #'   as the source data.
 #' @param clip logical. If TRUE (default), the result will be copied to
-#'   the clipboard.
+#'   the clipboard. When full_html is TRUE, the copying will be skipped.
 #' @param ... Paramters passed to [moodle_html_from_html()] and [moodle_html_from_md()].
 #'
 #' @return character vector representing the resulting document (HTML fragment).
 #' @export
 #'
-moodle_html <- function(file = NULL, dir = NULL, clip = TRUE, ...) {
+moodle_html <- function(file = NULL, dir = dirname(file), clip = TRUE, ...) {
 
   if (is.null(file)) {
     file <- file.choose()
@@ -59,8 +59,12 @@ moodle_html <- function(file = NULL, dir = NULL, clip = TRUE, ...) {
           )
 
   if (clip) {
-    clipr::write_clip(res, breaks = "\n")
-    message("HTML code has been copied to the clipboard. Now you can paste it to Moodle.")
+    if (!is.null(full_html <- list(...)[["full_html"]]) && full_html) {
+      message("Not copied to the clipboard because full_html is set to TRUE.")
+    } else {
+      clipr::write_clip(res, breaks = "\n")
+      message("HTML code has been copied to the clipboard. Now you can paste it to Moodle.")
+    }
   }
 
   invisible(res)
@@ -73,12 +77,13 @@ moodle_html <- function(file = NULL, dir = NULL, clip = TRUE, ...) {
 #' @param dir character. Path to the directory to save the resulting HTML file.
 #' @param tag character. Outer-most tag for the resulting HTML snippet.
 #' @param id character. id attribute for the outer-most tag.
-#' @param keep_script logical. If TRUE, do not remove script tags,
-#'   convenient when drafting a document.
+#' @param full_html logical. If TRUE, produce complete html output,
+#'   convenient when drafting a document. When this option is enabled, tag and
+#'   id options are silently ignored.
 #'
 #' @return character. HTML block.
 moodle_html_from_html <- function(
-    file, dir = NULL, tag = "article", id = NULL, keep_script = FALSE) {
+    file, dir = dirname(file), tag = "article", id = NULL, full_html = FALSE) {
   orig_html <- paste(readLines(file), collapse = "\n")
 
   inlined_html <-
@@ -86,30 +91,30 @@ moodle_html_from_html <- function(
     juicyjuice::css_inline() %>%
     rvest::read_html()
 
-  body <- rvest::html_element(inlined_html, "body")
+  if (full_html) {
+    container_tag <- inlined_html
+  } else {
+    body <- rvest::html_element(inlined_html, "body")
 
-  if (!keep_script) {
     scripts <- rvest::html_elements(body, "script")
     for (script in scripts) {
       xml2::xml_remove(script)
     }
+
+    body_attr <- rvest::html_attrs(body)
+    body_children <- rvest::html_children(body)
+
+    container_tag <-
+      rvest::read_html(str_glue("<{tag}></{tag}>")) %>%
+      rvest::html_element(tag)
+
+    if (!is.null(id)) xml2::xml_attr(container_tag, "id") <- id
+    xml2::xml_attr(container_tag, "style") <- body_attr
+
+    for (child in body_children) {
+      xml2::xml_add_child(container_tag, child)
+    }
   }
-
-  body_attr <- rvest::html_attrs(body)
-  body_children <- rvest::html_children(body)
-
-  container_tag <-
-    rvest::read_html(str_glue("<{tag}></{tag}>")) %>%
-    rvest::html_element(tag)
-
-  if (!is.null(id)) xml2::xml_attr(container_tag, "id") <- id
-  xml2::xml_attr(container_tag, "style") <- body_attr
-
-  for (child in body_children) {
-    xml2::xml_add_child(container_tag, child)
-  }
-
-  if (is.null(dir)) dir <- dirname(file)
 
   output <- with_ext(file, "html", dir)
 
@@ -140,7 +145,7 @@ moodle_html_from_html <- function(
 #' @param ... parameters passed on to [moodle_html_from_html()]
 #'
 #' @return character vector representing the resulting document (HTML fragment).
-moodle_html_from_md <- function(file, dir = NULL, stylesheet = NULL,
+moodle_html_from_md <- function(file, dir = dirname(file), stylesheet = NULL,
                                 template = NULL, debug = FALSE, ...) {
 
   tdir <- file.path(tempdir(), "moodle_html_from_md")
@@ -159,6 +164,9 @@ moodle_html_from_md <- function(file, dir = NULL, stylesheet = NULL,
 
   knitr::knit(file, intermediate_md, quiet = TRUE)
 
+  # tweaks for math equations
+  correct_equations(intermediate_md)
+
   # Merge stylesheets and resolve CSS variables for :root.
   if (is.null(stylesheet))
     stylesheet <- css_find("style.css")
@@ -175,13 +183,14 @@ moodle_html_from_md <- function(file, dir = NULL, stylesheet = NULL,
 
   out <- markdown::mark(file = intermediate_md,
                         output = NULL, format = "html",
-                        template = template, meta = list(css = stylesheet))
+                        template = template, meta = list(css = stylesheet),
+                        options = "-smartypants")
 
   out <- gsub("<p>$$", "<p class=\"math\">$$", out, fixed = TRUE)
-  writeLines(out, intermediate_html)
+
+  writeLines(na.omit(out), intermediate_html)
 
   # Style Inliner
-  if (is.null(dir)) dir <- dirname(file)
   ret <- moodle_html_from_html(intermediate_html, dir, ...)
 
   # Clean Up

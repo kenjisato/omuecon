@@ -7,7 +7,7 @@ pasted for Moodle.}
 \usage{
 moodle_html_from_md(
   file,
-  dir = NULL,
+  dir = dirname(file),
   stylesheet = NULL,
   template = NULL,
   debug = FALSE,

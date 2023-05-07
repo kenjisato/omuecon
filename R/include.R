@@ -23,7 +23,7 @@ includeText <- function(path, tmpfile = NULL,
   }
   knitr::knit(path, tmpfile, envir = data, quiet = quiet)
   rendered_text <- readLines(tmpfile)
-  writeLines(rendered_text)
+  knitr::asis_output(rendered_text)
 }
 
 
@@ -101,7 +101,7 @@ includeQuestion <- function(summary, detail,
     "</section>",
     "</details>"
   )
-  writeLines(result)
+  knitr::asis_output(result)
 }
 
 #' Include Audio media.
@@ -112,11 +112,8 @@ includeQuestion <- function(summary, detail,
 #' @export
 #'
 includeAudio <- function(url) {
-  writeLines(
-    paste0("<audio controls src=\"",
-           url,
-           "\"></audio>")
-  )
+  x <- paste0("<audio controls src=\"", url, "\"></audio>")
+  knitr::asis_output(x)
 }
 
 #' Include graphic media.
@@ -159,11 +156,8 @@ includeYT <- function(url, .class = 'includeYT') {
     '" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" allowfullscreen></iframe>'
   )
 
-  writeLines(c(
-    div,
-    iframe,
-    '</div>'
-  ))
+  x <- paste(div, iframe, '</div>', collapse = "\n")
+  knitr::asis_output(x)
 }
 
 

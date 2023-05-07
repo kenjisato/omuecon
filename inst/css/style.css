@@ -184,3 +184,26 @@ hr {
     left: 0px;
 }
 
+
+details {
+  margin: 15px 15px 25px 15px;
+}
+
+details > summary {
+  padding: 10px 14px 5px 28px;
+  background-color: #fefee0;
+  border: none;
+  box-shadow: 1px 1px 2px #bbbbbb;
+  cursor: pointer;
+}
+
+details > summary .summary-label {
+  font-weight: bold;
+}
+
+details > section {
+  background-color: #fefefe;
+  padding: 18px;
+  margin: 0;
+  box-shadow: 1px 1px 2px #bbbbbb;
+}

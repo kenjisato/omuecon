@@ -4,7 +4,7 @@
 \alias{moodle_html}
 \title{Create HTML block with inline CSS.}
 \usage{
-moodle_html(file = NULL, dir = NULL, clip = TRUE, ...)
+moodle_html(file = NULL, dir = dirname(file), clip = TRUE, ...)
 }
 \arguments{
 \item{file}{Path to the source HTML/Markdown file. If unspecified,
@@ -14,7 +14,7 @@ moodle_html(file = NULL, dir = NULL, clip = TRUE, ...)
 as the source data.}
 
 \item{clip}{logical. If TRUE (default), the result will be copied to
-the clipboard.}
+the clipboard. When full_html is TRUE, the copying will be skipped.}
 
 \item{...}{Paramters passed to \code{\link[=moodle_html_from_html]{moodle_html_from_html()}} and \code{\link[=moodle_html_from_md]{moodle_html_from_md()}}.}
 }

@@ -5,9 +5,9 @@
 \alias{moodle_label}
 \title{Wrappers for \code{\link[=moodle_html]{moodle_html()}}}
 \usage{
-moodle_page(file = NULL, dir = NULL, ...)
+moodle_page(file = NULL, dir = dirname(file), ...)
 
-moodle_label(file = NULL, dir = NULL, ...)
+moodle_label(file = NULL, dir = dirname(file), ...)
 }
 \arguments{
 \item{file}{character. Path to the markdown file.}

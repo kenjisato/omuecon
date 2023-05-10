@@ -4,10 +4,19 @@
 \alias{includeAudio}
 \title{Include Audio media.}
 \usage{
-includeAudio(url)
+includeAudio(
+  url,
+  preload = c("metadata", "auto", "none"),
+  alt = "Your browser does not support the audio element."
+)
 }
 \arguments{
 \item{url}{character. URL of the audio. The media must not be gated.}
+
+\item{preload}{character. One of metadata, auto and none.}
+
+\item{alt}{character. Message displayed when the browser does not support
+the audio tag.}
 }
 \value{
 HTML5 audio tag is inserted into the document.

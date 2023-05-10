@@ -107,12 +107,18 @@ includeQuestion <- function(summary, detail,
 #' Include Audio media.
 #'
 #' @param url character. URL of the audio. The media must not be gated.
+#' @param preload character. One of metadata, auto and none.
+#' @param alt character. Message displayed when the browser does not support
+#'   the audio tag.
 #'
 #' @return HTML5 audio tag is inserted into the document.
 #' @export
 #'
-includeAudio <- function(url) {
-  x <- paste0("<audio controls src=\"", url, "\"></audio>")
+includeAudio <- function(url, preload = c("metadata", "auto", "none"),
+                         alt = "Your browser does not support the audio element.") {
+  preload <- match.arg(preload)
+  x <- paste0('<audio controls src="', url,
+              '" preload="', preload, '">', alt, '</audio>')
   knitr::asis_output(x)
 }
 

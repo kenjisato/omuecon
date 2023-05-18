@@ -4,12 +4,19 @@
 \alias{counter}
 \title{Counter factory.}
 \usage{
-counter(label, sep = " ")
+counter(label, open = NULL, close = NULL, sep = " ", link = FALSE)
 }
 \arguments{
 \item{label}{character. Default prefix for the counter.}
 
+\item{open}{character. Opening bracket such as "(" or "["}
+
+\item{close}{character. Closing bracket such as ")" or "]"}
+
 \item{sep}{character. Separator between label and counter.}
+
+\item{link}{logical. If TRUE, get() method returns a counter
+surrounded by a tag, linked to the referenced id.}
 }
 \value{
 List of functions to set and get counters with label.
@@ -24,6 +31,6 @@ cnt$set()
 cnt$set("bbb", quiet = TRUE)
 cnt$get("aaa")
 cnt$get("bbb")
-cnt$get("aaa", bare = TRUE)
+cnt$get("aaa", type = "bare")
 cnt$dump()
 }

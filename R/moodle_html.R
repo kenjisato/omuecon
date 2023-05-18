@@ -145,7 +145,8 @@ moodle_html_from_html <- function(
 #' @param ... parameters passed on to [moodle_html_from_html()]
 #'
 #' @return character vector representing the resulting document (HTML fragment).
-moodle_html_from_md <- function(file, dir = dirname(file), stylesheet = NULL,
+moodle_html_from_md <- function(file, dir = dirname(file),
+                                stylesheet = getOption("omuecon.stylesheet", "style.css"),
                                 template = NULL, debug = FALSE, ...) {
 
   tdir <- file.path(tempdir(), "moodle_html_from_md")
@@ -168,10 +169,7 @@ moodle_html_from_md <- function(file, dir = dirname(file), stylesheet = NULL,
   correct_equations(intermediate_md)
 
   # Merge stylesheets and resolve CSS variables for :root.
-  if (is.null(stylesheet))
-    stylesheet <- css_find("style.css")
-  else
-    stylesheet <- css_find(stylesheet)
+  stylesheet <- css_find(stylesheet)
 
   css_str <- sapply(stylesheet, css_resolve)
   stylesheet <- tempfile(tmpdir = tdir, fileext = ".css")

@@ -1,13 +1,13 @@
 Package: omuecon
 Title: Helper Functions for Moodle
-Version: 0.0.9
+Version: 0.0.10
 Authors@R: 
     person("Kenji", "Sato", , "mail@kenjisato.jp", role = c("aut", "cre"))
 Description: A collection of functions to work with Moodle LMS. 
 License: MIT + file LICENSE
 Encoding: UTF-8
 Roxygen: list(markdown = TRUE)
-RoxygenNote: 7.2.1
+RoxygenNote: 7.2.3
 Imports: 
     clipr,
     dplyr,

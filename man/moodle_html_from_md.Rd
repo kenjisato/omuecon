@@ -8,7 +8,7 @@ pasted for Moodle.}
 moodle_html_from_md(
   file,
   dir = dirname(file),
-  stylesheet = NULL,
+  stylesheet = getOption("omuecon.stylesheet", "style.css"),
   template = NULL,
   debug = FALSE,
   ...

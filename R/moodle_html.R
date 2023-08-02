@@ -80,10 +80,12 @@ moodle_html <- function(file = NULL, dir = dirname(file), clip = TRUE, ...) {
 #' @param full_html logical. If TRUE, produce complete html output,
 #'   convenient when drafting a document. When this option is enabled, tag and
 #'   id options are silently ignored.
+#' @param remove_script logical. If TRUE, script tags are all stripped out.
 #'
 #' @return character. HTML block.
 moodle_html_from_html <- function(
-    file, dir = dirname(file), tag = "article", id = NULL, full_html = FALSE) {
+    file, dir = dirname(file), tag = "article", id = NULL, full_html = FALSE,
+    remove_script = FALSE) {
   orig_html <- paste(readLines(file), collapse = "\n")
 
   inlined_html <-
@@ -96,9 +98,11 @@ moodle_html_from_html <- function(
   } else {
     body <- rvest::html_element(inlined_html, "body")
 
-    scripts <- rvest::html_elements(body, "script")
-    for (script in scripts) {
-      xml2::xml_remove(script)
+    if (remove_script) {
+      scripts <- rvest::html_elements(body, "script")
+      for (script in scripts) {
+        xml2::xml_remove(script)
+      }
     }
 
     body_attr <- rvest::html_attrs(body)
@@ -172,8 +176,14 @@ moodle_html_from_md <- function(file, dir = dirname(file),
   stylesheet <- css_find(stylesheet)
 
   css_str <- sapply(stylesheet, css_resolve)
-  stylesheet <- tempfile(tmpdir = tdir, fileext = ".css")
-  cat(css_str, file = stylesheet, sep = "\n")
+  combined_stylesheet <- tempfile(tmpdir = tdir, fileext = ".css")
+  for (css_i in css_str) {
+    if (file.exists(css_i)) {
+      cat(readLines(css_i), file = combined_stylesheet, sep = "\n", append = TRUE)
+    } else {
+      cat(css_i, file = combined_stylesheet, append = TRUE)
+    }
+  }
 
   if (is.null(template)) {
     template <- system.file("xml", "template.html", package = .packageName)
@@ -181,7 +191,8 @@ moodle_html_from_md <- function(file, dir = dirname(file),
 
   out <- markdown::mark(file = intermediate_md,
                         output = NULL, format = "html",
-                        template = template, meta = list(css = stylesheet),
+                        template = template,
+                        meta = list(css = combined_stylesheet),
                         options = "-smartypants")
 
   out <- gsub("<p>$$", "<p class=\"math\">$$", out, fixed = TRUE)

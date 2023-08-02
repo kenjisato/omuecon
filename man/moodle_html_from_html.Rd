@@ -10,7 +10,8 @@ moodle_html_from_html(
   dir = dirname(file),
   tag = "article",
   id = NULL,
-  full_html = FALSE
+  full_html = FALSE,
+  remove_script = FALSE
 )
 }
 \arguments{
@@ -25,6 +26,8 @@ moodle_html_from_html(
 \item{full_html}{logical. If TRUE, produce complete html output,
 convenient when drafting a document. When this option is enabled, tag and
 id options are silently ignored.}
+
+\item{remove_script}{logical. If TRUE, script tags are all stripped out.}
 }
 \value{
 character. HTML block.

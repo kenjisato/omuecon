@@ -189,11 +189,13 @@ moodle_html_from_md <- function(file, dir = dirname(file),
     template <- system.file("xml", "template.html", package = .packageName)
   }
 
-  out <- markdown::mark(file = intermediate_md,
-                        output = NULL, format = "html",
-                        template = template,
-                        meta = list(css = combined_stylesheet),
-                        options = "-smartypants")
+  out <- suppressWarnings(
+    markdown::mark(file = intermediate_md,
+                   output = NULL, format = "html",
+                   template = template,
+                   meta = list(css = combined_stylesheet),
+                   options = "-smartypants")
+  )
 
   out <- gsub("<p>$$", "<p class=\"math\">$$", out, fixed = TRUE)
 

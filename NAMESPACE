@@ -2,6 +2,7 @@
 
 export(counter)
 export(includeAudio)
+export(includeFlickr)
 export(includeGraphics)
 export(includeQuestion)
 export(includeText)

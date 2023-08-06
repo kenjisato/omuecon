@@ -1,6 +1,6 @@
 Package: omuecon
 Title: Helper Functions for Moodle
-Version: 0.0.11
+Version: 0.0.12
 Authors@R: 
     person("Kenji", "Sato", , "mail@kenjisato.jp", role = c("aut", "cre"))
 Description: A collection of functions to work with Moodle LMS. 
@@ -11,6 +11,7 @@ RoxygenNote: 7.2.3
 Imports: 
     clipr,
     dplyr,
+    glue,
     juicyjuice,
     knitr,
     markdown,

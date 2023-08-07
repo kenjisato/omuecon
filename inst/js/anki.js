@@ -4,6 +4,5 @@ $('.anki-marker .anki-text').click(function(){
   } else {
     $(this).css('opacity', '1');
   }
-    $(this).toggleClass('open');
-  });
+  $(this).toggleClass('open');
 });

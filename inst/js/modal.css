@@ -3,6 +3,7 @@
 }
 
 .modal {
+  z-index: 1201;
   height: 60%;
   overflow-y: scroll;
 }

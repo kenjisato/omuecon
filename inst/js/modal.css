@@ -1,9 +1,14 @@
+.blocker {
+  z-index: 1200;
+}
+
 .modal {
-  width: 50%;
+  height: 60%;
+  overflow-y: scroll;
 }
 
 .modal a.close-modal {
-  top: 0px;
-  right: 0px;
-
+  position: absolute;
+  top: -12.5px;
+  right: -12.5px;
 }

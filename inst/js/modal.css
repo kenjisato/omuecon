@@ -4,7 +4,7 @@
 
 .modal {
   z-index: 1201;
-  height: 60%;
+  height: 50%;
   overflow-y: scroll;
 }
 
@@ -12,4 +12,8 @@
   position: absolute;
   top: 12.5px;
   right: 12.5px;
+}
+
+.modal h2 {
+  width: 90%;
 }

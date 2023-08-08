@@ -9,6 +9,6 @@
 
 .modal a.close-modal {
   position: absolute;
-  top: -12.5px;
-  right: -12.5px;
+  top: 12.5px;
+  right: 12.5px;
 }

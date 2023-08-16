@@ -186,7 +186,7 @@ moodle_html_from_md <- function(file, dir = dirname(file),
   }
 
   if (is.null(template)) {
-    template <- system.file("xml", "template.html", package = .packageName)
+    template <- pkg_file("xml", "template.html")
   }
 
   out <- suppressWarnings(

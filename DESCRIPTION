@@ -1,8 +1,9 @@
 Package: omuecon
 Title: Helper Functions for Moodle
-Version: 0.0.12
+Version: 0.1.0
 Authors@R: 
-    person("Kenji", "Sato", , "mail@kenjisato.jp", role = c("aut", "cre"))
+    person("Kenji", "Sato", , "mail@kenjisato.jp", role = c("aut", "cre"),
+           comment = c(ORCID = "0009-0000-4520-2560"))
 Description: A collection of functions to work with Moodle LMS. 
 License: MIT + file LICENSE
 Encoding: UTF-8

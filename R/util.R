@@ -1,5 +1,3 @@
-PKG <- "omuecon"
-
 with_ext <- function(x, ext, dir = NULL) {
   new_path <- paste0(tools::file_path_sans_ext(x), ".", ext)
   if (is.null(dir)) {
@@ -35,3 +33,28 @@ formatDate <- function(dates, year = FALSE, weekday = TRUE) {
     paste0(stringr::str_glue(fmt), wd(dates))
   )
 }
+
+
+pkg_file <- function(..., pkg = .packageName) {
+  system.file(..., package = pkg, mustWork = TRUE)
+}
+
+
+getd <- function(x, default = NULL) {
+  if (!is.null(x)) {
+    x
+  } else {
+    default
+  }
+}
+
+
+dodge_name <- function(a, b){
+  clash <- normalizePath(a, mustWork = FALSE) == normalizePath(b, mustWork = FALSE)
+  if (clash && file.exists(b)) {
+    paste0(tools::file_path_sans_ext(a), "-out.html")
+  } else {
+    a
+  }
+}
+
